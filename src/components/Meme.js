@@ -1,27 +1,40 @@
 import React from "react";
 
 export default function Meme() {
-  /**
-   * Challenge:
-   * Try to figure out why our code is broken! 😞
-   *
-   * Hint: it has to do with the difference between
-   * what we were importing before from memesData.js
-   * and what we're setting our state as with `allMemes`
-   */
+
 
   const [meme, setMeme] = React.useState({
     topText: "",
     bottomText: "",
     randomImage: "http://i.imgflip.com/1bij.jpg",
   });
-  const [allMemes, setAllMemes] = React.useState([]);
-        React.useEffect(async () => {
-            const res = await fetch("https://api.imgflip.com/get_memes");
-            const data = await res.json();
-            setAllMemes(data.data.memes);
-              }, 
-        []);
+
+
+ const [allMemes, setAllMemes] = React.useState([])
+    
+    /**
+    useEffect takes a function as its parameter. If that function
+    returns something, it needs to be a cleanup function. Otherwise,
+    it should return nothing. If we make it an async function, it
+    automatically retuns a promise instead of a function or nothing.
+    Therefore, if you want to use async operations inside of useEffect,
+    you need to define the function separately inside of the callback
+    function, as seen below:
+    */
+  
+    
+
+
+
+
+    React.useEffect(() => {
+        async function getMemes() {
+            const res = await fetch("https://api.imgflip.com/get_memes")
+            const data = await res.json()
+            setAllMemes(data.data.memes)
+        }
+        getMemes()
+    }, [])
 
 
               //we can write like this
@@ -47,6 +60,7 @@ export default function Meme() {
       randomImage: url,
     }));
   }
+ 
 
   function handleChange(event) {
     const { name, value } = event.target;
